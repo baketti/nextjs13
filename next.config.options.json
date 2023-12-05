@@ -1,4 +1,9 @@
 {
-  "rewrites": [],
+  "rewrites": [
+    {
+      "source": "/admin-panel/:path*",
+      "destination": "/admin-panel"
+    }
+  ],
   "env": []
 }

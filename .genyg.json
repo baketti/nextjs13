@@ -3,7 +3,7 @@
   "packages": {
     "core": true,
     "mui": true,
-    "spa": false,
+    "spa": true,
     "translations": false,
     "mongodb": false,
     "cognito": false,
