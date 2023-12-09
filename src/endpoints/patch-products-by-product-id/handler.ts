@@ -4,15 +4,15 @@ import {
   StatusCodes,
 } from "@/lib/response-handler";
 import { NextApiResponse } from "next";
-import { DeleteProductsByProductIdApi } from "./interfaces";
+import { PatchProductsByProductIdApi } from "./interfaces";
 import { Product } from "@/models/server/Product";
 
 export default async function handler(
-  req: DeleteProductsByProductIdApi.Request,
-  res: NextApiResponse<DeleteProductsByProductIdApi.EndpointResponse>,
+  req: PatchProductsByProductIdApi.Request,
+  res: NextApiResponse<PatchProductsByProductIdApi.EndpointResponse>,
 ) {
   try {
-    const { validationResult, queryStringParameters } = req;
+    const { validationResult, queryStringParameters, payload } = req;
 
     if (!validationResult.isValid) {
       return ResponseHandler.json<ErrorResponse>(
@@ -24,7 +24,6 @@ export default async function handler(
 
     const { productId } = queryStringParameters;
     const product = await Product.getById(productId);
-
     if (!product) {
       return ResponseHandler.json<ErrorResponse>(
         res,
@@ -32,11 +31,18 @@ export default async function handler(
         StatusCodes.NotFound,
       );
     }
-    //SOLO SE PRODUCT ESISTE LO ELIMINO
-    await Product.delete(product._id); //stessa cosa di (productId);
-    return ResponseHandler.json<DeleteProductsByProductIdApi.SuccessResponse>(
+
+    const { description, price } = payload;
+    await product.patch({
+      description,
+      price,
+    });
+
+    return ResponseHandler.json<PatchProductsByProductIdApi.SuccessResponse>(
       res,
-      {},
+      {
+        product: product.toClientVersion(),
+      },
     );
   } catch (e) {
     console.error(e);

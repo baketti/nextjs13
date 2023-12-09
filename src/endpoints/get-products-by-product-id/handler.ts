@@ -4,16 +4,15 @@ import {
   StatusCodes,
 } from "@/lib/response-handler";
 import { NextApiResponse } from "next";
-import { DeleteProductsByProductIdApi } from "./interfaces";
+import { GetProductByProductIdApi } from "./interfaces";
 import { Product } from "@/models/server/Product";
 
 export default async function handler(
-  req: DeleteProductsByProductIdApi.Request,
-  res: NextApiResponse<DeleteProductsByProductIdApi.EndpointResponse>,
+  req: GetProductByProductIdApi.Request,
+  res: NextApiResponse<GetProductByProductIdApi.EndpointResponse>,
 ) {
   try {
     const { validationResult, queryStringParameters } = req;
-
     if (!validationResult.isValid) {
       return ResponseHandler.json<ErrorResponse>(
         res,
@@ -24,7 +23,6 @@ export default async function handler(
 
     const { productId } = queryStringParameters;
     const product = await Product.getById(productId);
-
     if (!product) {
       return ResponseHandler.json<ErrorResponse>(
         res,
@@ -32,12 +30,9 @@ export default async function handler(
         StatusCodes.NotFound,
       );
     }
-    //SOLO SE PRODUCT ESISTE LO ELIMINO
-    await Product.delete(product._id); //stessa cosa di (productId);
-    return ResponseHandler.json<DeleteProductsByProductIdApi.SuccessResponse>(
-      res,
-      {},
-    );
+    return ResponseHandler.json<GetProductByProductIdApi.SuccessResponse>(res, {
+      product: product?.toClientVersion(),
+    });
   } catch (e) {
     console.error(e);
     return ResponseHandler.json<ErrorResponse>(

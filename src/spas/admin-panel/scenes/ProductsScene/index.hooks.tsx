@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { GridColDef } from "@mui/x-data-grid";
 import { actions, selectors } from "@/spas/admin-panel/redux-store";
 import { useDispatch, useSelector } from "react-redux";
@@ -14,7 +14,7 @@ export const useProductsScene = () => {
   const [showAddProductForm, setShowAddProductForm] = useState(false);
   const handleDeleteProduct = useCallback(
     (productId: string) => {
-      dispatch(actions.deleteProduct(productId));
+      dispatch(actions.deleteProductsByProductId.request({ productId }));
     },
     [dispatch],
   );
@@ -67,9 +67,15 @@ export const useProductsScene = () => {
       id: product._id,
     }));
   }, [productsList]);
+
   const handleNewProduct = useCallback(() => {
     setShowAddProductForm((prev) => !prev);
   }, []);
+
+  //ogni volta che arriviamo nella pagina dei prodotti parte la chiamata AJAX che ci mostra la lista dei prodotti aggiornata
+  useEffect(() => {
+    dispatch(actions.getProducts.request({}));
+  }, [dispatch]);
   return {
     handleNewProduct,
     rows,

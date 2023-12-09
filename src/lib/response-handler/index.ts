@@ -107,6 +107,7 @@ class TestHandler {
       req,
       res,
     );
+    console.log("data: ", data);
     return { res, payload: data.payload, statusCode: data.statusCode };
   }
 }
@@ -121,6 +122,7 @@ export const nextApiEndpointHandler =
       const endpoint = await import(
         `@/endpoints/${req.method.toLowerCase()}-${route}`
       );
+      console.log("endpoint: ", endpoint);
       if (endpoint.default) {
         return endpoint.default(req, res);
       } else {

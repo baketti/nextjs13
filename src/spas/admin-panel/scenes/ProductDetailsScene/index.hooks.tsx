@@ -1,14 +1,17 @@
 import { useParams } from "react-router";
-import { useMemo } from "react";
-import { useSelector } from "react-redux";
-import { selectors } from "@/spas/admin-panel/redux-store";
-
+import { useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { actions, selectors } from "@/spas/admin-panel/redux-store";
 export const useProductDetailsScene = () => {
-  const { productId } = useParams(); //ci consente di recuperare i parametri dinamini (:params) passati nell'url
-  const productsList = useSelector(selectors.getProductsList);
-  const product = useMemo(
-    () => productsList.find((p) => p._id === productId),
-    [productsList, productId],
+  //importo dispatch
+  const dispatch = useDispatch();
+  const { productId } = useParams(); //ci consente di recuperare i parametri dinamici (:params) passati nell'url
+  const product = useSelector(selectors.getCurrentProduct);
+  const isLoadingProduct = useSelector(
+    selectors.getAjaxIsLoadingByApi(actions.getProductsByProductId.api),
   );
-  return { product };
+  useEffect(() => {
+    dispatch(actions.getProductsByProductId.request({ productId }));
+  }, [dispatch, productId]);
+  return { product, isLoadingProduct };
 };

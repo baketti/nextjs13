@@ -9,6 +9,11 @@ import {
 
 export interface DeleteProductsByProductIdParams {
   productId: string;
+  /*
+   per il momento lato client possiamo lasciare stringa
+   ma è necessario ricordarsi che questo productId è si una stringa
+   ma una stringa che rappresenta un ObjectId
+   */
 }
 export interface DeleteProductsByProductIdResponseData {}
 export default apiActionBuilder<
