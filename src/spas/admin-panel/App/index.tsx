@@ -22,11 +22,11 @@ const App: React.FC = () => {
         <Routes>
           <Route path="/login" element={<LoginScene />} />
           <Route path="/dashboard" element={<DashboardScene />}>
+            <Route path="products" element={<ProductsScene />}></Route>
             <Route
               path="products/:productId"
               element={<ProductDetailsScene />}
             ></Route>
-            <Route path="products" element={<ProductsScene />}></Route>
             <Route path="users" element={<UsersScene />}></Route>
           </Route>
           <Route path="/" element={<span>TEST</span>} />

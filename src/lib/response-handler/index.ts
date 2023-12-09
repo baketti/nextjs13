@@ -124,10 +124,11 @@ export const nextApiEndpointHandler =
       if (endpoint.default) {
         return endpoint.default(req, res);
       } else {
+        console.error("ERRORE! ");
         return res.status(StatusCodes.MethodNotAllowed).json({});
       }
     } catch (e) {
-      console.error(e);
+      console.error("ERRORE server! ", e);
       return res.status(StatusCodes.InternalServerError).json({});
     }
   };

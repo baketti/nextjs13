@@ -41,7 +41,7 @@ export const useProductsScene = () => {
         headerName: "",
         renderCell: (params) => {
           return (
-            <IconButton onClick={() => handleDeleteProduct(params.row.id)}>
+            <IconButton onClick={() => handleDeleteProduct(params.row._id)}>
               <DeleteIcon />
             </IconButton>
           );
@@ -52,7 +52,7 @@ export const useProductsScene = () => {
         headerName: "",
         renderCell: (params) => {
           return (
-            <IconButton onClick={() => navigate(params.row.id)}>
+            <IconButton onClick={() => navigate(params.row._id)}>
               <VisibilityIcon />
             </IconButton>
           );
@@ -61,12 +61,18 @@ export const useProductsScene = () => {
     ],
     [handleDeleteProduct, navigate],
   );
+  const rows = useMemo(() => {
+    return productsList.map((product) => ({
+      ...product,
+      id: product._id,
+    }));
+  }, [productsList]);
   const handleNewProduct = useCallback(() => {
     setShowAddProductForm((prev) => !prev);
   }, []);
   return {
     handleNewProduct,
-    rows: productsList,
+    rows,
     columns,
     showAddProductForm,
   };

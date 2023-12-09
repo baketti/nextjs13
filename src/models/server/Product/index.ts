@@ -1,14 +1,21 @@
 import { Filter, ObjectId, WithId } from "mongodb";
 import mongoDao from "@/lib/mongodb/mongo-dao";
+import { IProductFe } from "@/models/client/ProductFe";
 
 export type IProduct = {
   _id?: ObjectId;
+  name: string;
+  description: string;
+  price: number;
   created: Date;
   v: number;
 };
 
 export class Product implements WithId<IProduct> {
   _id: ObjectId;
+  name: string;
+  description: string;
+  price: number;
   created: Date;
   v: number;
 
@@ -20,10 +27,17 @@ export class Product implements WithId<IProduct> {
     this.fromInterface(iProduct);
   }
 
-  static async create(): Promise<Product | null> {
+  static async create(
+    name: string,
+    description: string,
+    price: number,
+  ): Promise<Product | null> {
     const iProduct = await mongoDao.insertOne<IProduct>(
       Product.collectionName,
       {
+        name,
+        description,
+        price,
         created: new Date(),
         v: 1,
       },
@@ -100,13 +114,24 @@ export class Product implements WithId<IProduct> {
     return iProducts.map((iProduct) => new Product(iProduct));
   }
 
-  /* Mostly for internal use */
+  toClientVersion(): IProductFe {
+    return {
+      _id: this._id.toHexString(),
+      name: this.name,
+      description: this.description,
+      price: this.price,
+    };
+  }
 
+  /* Mostly for internal use */
   fromInterface(iProduct: IProduct) {
     if (!iProduct._id) {
       throw new Error("Interface object doesn't have an _id");
     }
     this._id = iProduct._id;
+    this.name = iProduct.name;
+    this.description = iProduct.description;
+    this.price = iProduct.price;
     this.created = iProduct.created;
     this.v = iProduct.v;
   }

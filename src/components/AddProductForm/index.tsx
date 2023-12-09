@@ -1,19 +1,18 @@
 import React, { memo } from "react";
 import { FormProvider } from "react-hook-form";
 import { useAddProductForm } from "./index.hooks";
-import { Button, Stack } from "@mui/material";
+import { Button, CircularProgress, Stack } from "@mui/material";
 import { FormTextField } from "@/components/_form/FormTextField";
-
 type AddProductFormProps = {};
 
 export const AddProductForm = memo(({}: AddProductFormProps) => {
-  const { formData, triggerSubmit, submitDisabled } = useAddProductForm();
+  const { formData, triggerSubmit, submitDisabled, isCreatingProduct } =
+    useAddProductForm();
 
   return (
     <FormProvider {...formData}>
       <form onSubmit={triggerSubmit}>
         <Stack spacing={3}>
-          <FormTextField name="id" label="id" />
           <FormTextField name="name" label="nome" />
           <FormTextField name="description" label="descrizione" />
           <FormTextField
@@ -23,7 +22,7 @@ export const AddProductForm = memo(({}: AddProductFormProps) => {
             inputProps={{ step: 0.01 }}
           />
           <Button variant="contained" type="submit" disabled={submitDisabled}>
-            Salva
+            {isCreatingProduct ? <CircularProgress size={24} /> : "Crea"}
           </Button>
         </Stack>
       </form>

@@ -7,7 +7,7 @@ export const useProductDetailsScene = () => {
   const { productId } = useParams(); //ci consente di recuperare i parametri dinamini (:params) passati nell'url
   const productsList = useSelector(selectors.getProductsList);
   const product = useMemo(
-    () => productsList.find((p) => p.id === productId),
+    () => productsList.find((p) => p._id === productId),
     [productsList, productId],
   );
   return { product };

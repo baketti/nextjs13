@@ -1,12 +1,12 @@
 export type IProductFe = {
-  id: string;
+  _id: string;
   name: string;
   description: string;
   price: number;
 };
 
 export class ProductFe implements IProductFe {
-  id: string;
+  _id: string;
   name: string;
   description: string;
   price: number;

@@ -114,7 +114,7 @@ export function* ajaxRequestSaga() {
           exit = true;
         }
       } catch (e) {
-        console.error(e);
+        console.error("ERRORE AJAX SAGAS ", e);
       }
     },
   );
