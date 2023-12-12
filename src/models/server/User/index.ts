@@ -94,7 +94,9 @@ export class User implements WithId<IUser> {
   }
 
   /* Mostly for internal use */
-
+  static async deleteMany(): Promise<void> {
+    await mongoDao.deleteMany<IUser>(User.collectionName, {});
+  }
   fromInterface(iUser: IUser) {
     if (!iUser._id) {
       throw new Error("Interface object doesn't have an _id");

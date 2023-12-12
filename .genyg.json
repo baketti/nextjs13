@@ -7,6 +7,7 @@
     "translations": false,
     "mongodb": true,
     "cognito": false,
-    "cookieAuth": false
-  }
+    "cookieAuth": true
+  },
+  "cookieRoles": ["admin", "user"]
 }
